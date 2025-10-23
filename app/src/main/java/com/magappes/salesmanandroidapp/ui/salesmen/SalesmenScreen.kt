@@ -79,7 +79,7 @@ private fun SalesmenScreen(
             SearchTextField(
                 modifier = Modifier.padding(horizontal = 16.dp),
                 value = uiState.searchQuery,
-                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Number),
+                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Text),
                 maxLength = 5,
                 onValueChange = {
                     onAction(SalesmanUiAction.OnSearchQueryChanged(it))

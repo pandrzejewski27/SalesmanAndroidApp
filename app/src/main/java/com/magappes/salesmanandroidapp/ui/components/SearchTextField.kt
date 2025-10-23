@@ -107,7 +107,7 @@ private fun isValidSearchInput(input: TextFieldValue, maxLength: Int?): Boolean 
     val text = input.text
     return maxLength != null &&
             text.length <= maxLength &&
-            (text.toIntOrNull() != null || text.isEmpty())
+            (text.isEmpty() || text.matches(Regex("^\\d{0,5}\\*?\$")))
 }
 
 internal class SearchTextFieldProvider : PreviewParameterProvider<String> {

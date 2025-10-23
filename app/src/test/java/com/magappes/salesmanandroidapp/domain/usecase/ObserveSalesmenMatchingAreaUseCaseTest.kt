@@ -22,16 +22,16 @@ class ObserveSalesmenMatchingAreaUseCaseTest {
 
     private lateinit var observeSalesmenMatchingAreaUseCase: ObserveSalesmenMatchingAreaUseCase
 
-    private val sampleSalesmen = listOf(
+    private val testSalesmen = listOf(
         Salesman("Alex Uber", listOf("86453")),
-        Salesman("Chris Krapp", listOf("762*")),
-        Salesman("Bernd Schmitt", listOf("7619*"))
+        Salesman("Chris Krapp", listOf("76251")),
+        Salesman("Bernd Schmitt", listOf("76195"))
     )
 
     @BeforeEach
     fun setup() {
         MockKAnnotations.init(this)
-        coEvery { salesmenRepository.getSalesmen() } returns flowOf(sampleSalesmen)
+        coEvery { salesmenRepository.getSalesmen() } returns flowOf(testSalesmen)
         observeSalesmenMatchingAreaUseCase = ObserveSalesmenMatchingAreaUseCase(salesmenRepository)
     }
 
@@ -43,24 +43,30 @@ class ObserveSalesmenMatchingAreaUseCaseTest {
     @Test
     fun `returns all salesmen when area is null`() = runBlocking {
         val result = observeSalesmenMatchingAreaUseCase(null).first()
-        Assertions.assertEquals(sampleSalesmen, result)
+        Assertions.assertEquals(testSalesmen, result)
     }
 
     @Test
     fun `returns all salesmen when area is empty`() = runTest {
         val result = observeSalesmenMatchingAreaUseCase.invoke("").first()
-        Assertions.assertEquals(sampleSalesmen, result)
+        Assertions.assertEquals(testSalesmen, result)
     }
 
     @Test
     fun `returns salesman when area match`() = runTest {
         val result = observeSalesmenMatchingAreaUseCase.invoke("86453").first()
-        Assertions.assertEquals(listOf(sampleSalesmen[0]), result)
+        Assertions.assertEquals(listOf(testSalesmen[0]), result)
+    }
+
+    @Test
+    fun `returns salesman when area match with asterix`() = runTest {
+        val result = observeSalesmenMatchingAreaUseCase.invoke("86*").first()
+        Assertions.assertEquals(listOf(testSalesmen[0]), result)
     }
 
     @Test
     fun `returns empty list when no match`() = runTest {
-        val result = observeSalesmenMatchingAreaUseCase.invoke("999").first()
+        val result = observeSalesmenMatchingAreaUseCase.invoke("99999").first()
         Assertions.assertEquals(emptyList<Salesman>(), result)
     }
 }
