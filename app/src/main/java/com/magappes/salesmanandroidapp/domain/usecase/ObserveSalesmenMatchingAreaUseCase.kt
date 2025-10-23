@@ -12,37 +12,10 @@ internal class ObserveSalesmenMatchingAreaUseCase @Inject constructor(
 ) {
     suspend operator fun invoke(area: String? = null): Flow<List<Salesman>> {
         return salesmenRepository.getSalesmen().map { salesmen ->
-            val range = area?.let { parseAreaExpression(it) } ?: return@map salesmen
-
+            if (area.isNullOrBlank()) return@map salesmen
             salesmen.filter { salesman ->
-                salesman.areas.any { it.isValidArea() && it.toInt() in range }
+                salesman.areas.any { it == area }
             }
         }
     }
-
-    private fun parseAreaExpression(area: String): IntRange? {
-        val areaTrimmed = area.trim()
-        return when {
-            areaTrimmed.endsWith(ASTERIX_SUFFIX) -> {
-                val prefix = areaTrimmed.dropLast(1)
-                if (!prefix.all { it.isDigit() }) return null
-                val start = (prefix + "0".repeat(AREA_LENGTH - prefix.length)).toInt()
-                val end = (prefix + "9".repeat(AREA_LENGTH - prefix.length)).toInt()
-                start..end
-            }
-            areaTrimmed.length == AREA_LENGTH && areaTrimmed.all { it.isDigit() } -> {
-                val code = areaTrimmed.toInt()
-                code..code
-            }
-            else -> null
-        }
-    }
-
-    private fun String.isValidArea() = length == AREA_LENGTH && all { it.isDigit() }
-
-    private companion object {
-        private const val AREA_LENGTH = 5
-        private const val ASTERIX_SUFFIX = "*"
-    }
-
 }

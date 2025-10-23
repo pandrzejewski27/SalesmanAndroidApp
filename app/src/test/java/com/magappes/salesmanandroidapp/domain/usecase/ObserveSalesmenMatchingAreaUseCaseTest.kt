@@ -24,8 +24,8 @@ class ObserveSalesmenMatchingAreaUseCaseTest {
 
     private val testSalesmen = listOf(
         Salesman("Alex Uber", listOf("86453")),
-        Salesman("Chris Krapp", listOf("76251")),
-        Salesman("Bernd Schmitt", listOf("76195"))
+        Salesman("Chris Krapp", listOf("76*")),
+        Salesman("Bernd Schmitt", listOf("761*"))
     )
 
     @BeforeEach
@@ -60,8 +60,8 @@ class ObserveSalesmenMatchingAreaUseCaseTest {
 
     @Test
     fun `returns salesman when area match with asterix`() = runTest {
-        val result = observeSalesmenMatchingAreaUseCase.invoke("86*").first()
-        Assertions.assertEquals(listOf(testSalesmen[0]), result)
+        val result = observeSalesmenMatchingAreaUseCase.invoke("761*").first()
+        Assertions.assertEquals(listOf(testSalesmen[2]), result)
     }
 
     @Test

@@ -20,19 +20,19 @@ class SalesmenRepositoryImpl @Inject constructor() : SalesmenRepository {
         Salesman(
             name = "Bernd Schmitt",
             areas = listOf(
-                "76196"
+                "7619*"
             )
         ),
         Salesman(
             name = "Chris Krapp",
             areas = listOf(
-                "76254"
+                "762*"
             )
         ),
         Salesman(
             name = "Alex Uber",
             areas = listOf(
-                "86345"
+                "86*"
             )
         )
     )
